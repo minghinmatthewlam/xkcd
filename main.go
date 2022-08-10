@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -55,8 +54,8 @@ func worker(wg *sync.WaitGroup) {
 			log.Println("error in fetching: ", err)
 		}
 		results <- *result
-		wg.Done()
 	}
+	wg.Done()
 }
 
 func createWorkerPool(numWorkers int) {
@@ -82,7 +81,7 @@ func fetch(n int) (*Result, error) {
 		Timeout: 5 * time.Second,
 	}
 
-	url := strings.Join([]string{URL, strconv.Itoa(n), "info.0.json"}, "/")
+	url := strings.Join([]string{URL, fmt.Sprintf("%d", n), "info.0.json"}, "/")
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
